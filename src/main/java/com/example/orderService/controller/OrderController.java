@@ -2,15 +2,24 @@ package com.example.orderService.controller;
 
 
 import com.example.orderService.dto.OrderDetailsDTO;
+import com.example.orderService.dto.OrderTableDTO;
+import com.example.orderService.entity.CartDetails;
 import com.example.orderService.entity.OrderDetails;
+import com.example.orderService.entity.OrderTable;
+import com.example.orderService.service.CartService;
 import com.example.orderService.service.OrderService;
+import com.example.orderService.service.implementation.CartServiceImplementation;
 import com.example.orderService.service.implementation.OrderServiceImplementation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,20 +29,52 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @PostMapping("/saveOrder")
-    public ResponseEntity<String> addOrder(@RequestBody OrderDetailsDTO orderDetailsDTO){
+    @Autowired
+    CartService cartService;
 
-        OrderDetails orderDetails=new OrderDetails();
-        BeanUtils.copyProperties(orderDetailsDTO,orderDetails);    //first arg is source and second one is target
 
-       OrderDetails orderCreated=orderService.save(orderDetails);
 
-        return new ResponseEntity<String>(orderCreated.getOrderId(),HttpStatus.CREATED);
+
+    // hit from user view
+    @PostMapping("/save/{userId}") /// front end will send us userID
+    public ResponseEntity<Integer> addOrderDetail(@PathVariable(name="userId") String userId){
+
+        OrderTable orderTable =new OrderTable();
+        OrderTableDTO orderTableDTO = new OrderTableDTO();
+        BeanUtils.copyProperties(orderTableDTO,orderTable);    //first arg is source and second one is target
+        OrderTable orderTableCreated=orderService.saveOrder(orderTable);
+        int orderId=orderTableCreated.getOrderId();
+
+
+         List<CartDetails> details=cartService.getCartDetails(userId);
+         OrderDetails orderDetails=new OrderDetails();
+
+         orderDetails.setOrderId(orderId);
+         orderDetails.setMerchantId(details.get(0).getMerchantId());
+         orderDetails.setPrice(details.get(0).getPrice());
+         orderDetails.setUserId(userId);
+         orderDetails.setProductId(details.get(0).getProductId());
+         orderDetails.setQuantity(details.get(0).getQuantity());
+
+        OrderDetails orderCreated=orderService.saveDetail(orderDetails);
+
+        return new ResponseEntity<Integer>(orderCreated.getKeyId(),HttpStatus.CREATED);
+
     }
+     /// hit from merchant view
+    @GetMapping(value="/customerDetails/{merchantId}/{productId}")
+    public List<OrderDetails> fetchCustomerDetails(@PathVariable("merchantId") String merchantId,@PathVariable("productId") String productId){
+        return orderService.fetchUserDetails(merchantId,productId);
 
+    }
+    /// on click of checkout in user view
+    //// to do in this is send email to the user as well
 
-    //@GetMapping("/customerDetails/")
-    //public List<OrderDetails> fetchCustomerDetails(String merchantIdfromgateway,String productidfromapi)
+    @PostMapping(value="/checkout")
+    public String sendEmail() throws IOException, MessagingException {
+        orderService.sendMail();
+        return "Email sent successfully";
+    }
 
 
 

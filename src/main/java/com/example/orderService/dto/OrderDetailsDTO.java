@@ -13,9 +13,8 @@ public class OrderDetailsDTO {
     private String userId;
     private String productId;
     private String merchantId;
-    private String orderId;
-    int rating;
-    Date timestamp;
+    private int orderId;     //we will get this form the OrderTable
+    double rating;
     int quantity;
     double price;
 

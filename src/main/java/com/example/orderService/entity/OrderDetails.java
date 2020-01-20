@@ -19,12 +19,11 @@ public class OrderDetails {
     @Column(name="id")
     private int keyId;
 
-    private String userId;
-    private String productId;
-    private String merchantId;
-    private String orderId;
-    int rating;
-    Date timestamp;
+    private String userId;  //
+    private String productId;  //
+    private String merchantId;  //
+    private int orderId;     //
+    double rating;
     int quantity;
     double price;
 

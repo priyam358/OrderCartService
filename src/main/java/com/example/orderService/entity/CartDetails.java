@@ -14,11 +14,12 @@ import javax.persistence.*;
 public class CartDetails {
 
     @Id
-    @SequenceGenerator(name="userId", initialValue=1, allocationSize=100)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="userId")
-    private int userId;
-    private int merchantId;
-    private int productId;
+    @SequenceGenerator(name="keyId", initialValue=1, allocationSize=100)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="keyId")
+    private int keyId;
+    private String userId;
+    private String merchantId;
+    private String productId;
     private int quantity;
     private double price;
 

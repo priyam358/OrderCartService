@@ -6,6 +6,8 @@ import com.example.orderService.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class CartServiceImplementation implements CartService {
@@ -17,4 +19,16 @@ public class CartServiceImplementation implements CartService {
     public CartDetails save(CartDetails cart) {
         return cartRepository.save(cart);
     }
+
+    @Override
+    public void updateDetails(int quantity, String userId) {
+        cartRepository.updateQuantity(quantity,userId);
+    }
+
+    @Override
+    public List<CartDetails> getCartDetails(String userId) {
+        return cartRepository.getCartDetails(userId);
+    }
+
+
 }
