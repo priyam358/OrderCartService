@@ -12,4 +12,6 @@ public interface CartService  {
     void updateDetails(int quantity,String userId);
 
     List<CartDetails> getCartDetails(String userId);
+
+    void emptyCart(String userId);
 }

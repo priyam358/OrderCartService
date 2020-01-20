@@ -22,4 +22,8 @@ public interface OrderService {
 
     void sendMail() throws MessagingException, IOException;
 
+    List<OrderTable> getOrderLog();
+
+    List<OrderDetails> getRecentOrders(String userId);
+
 }

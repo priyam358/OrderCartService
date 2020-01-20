@@ -20,15 +20,15 @@ public class CartController {
     @Autowired
     CartService cartService;
 
-    @PostMapping("/saveOrder")
+    @PostMapping("/saveOrder") //naming convention
     public ResponseEntity<String> addCart(@RequestBody CartDetailsDTO cartDTO){
 
         CartDetails cartDetails  =new CartDetails();
-        BeanUtils.copyProperties(cartDTO,cartDetails);    //first arg is source and second one is target
+        BeanUtils.copyProperties(cartDTO,cartDetails);
 
         CartDetails cartCreated=cartService.save(cartDetails);
 
-        return new ResponseEntity<String>(String.valueOf(cartCreated.getKeyId()),HttpStatus.CREATED);
+        return new ResponseEntity<>(String.valueOf(cartCreated.getKeyId()), HttpStatus.CREATED);
 
 
     }

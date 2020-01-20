@@ -13,7 +13,8 @@ import java.util.Optional;
 public interface OrderRepository extends CrudRepository<OrderDetails,String> {
 
 
-    @Query(value = "Select * from order_details where merchant_id=?1 and product_id=?2",nativeQuery=true)
-    List<OrderDetails> userDetails(String merchantId,String productId);
+    List<OrderDetails> findByMerchantIdAndProductId(String merchantId,String productId);
+
+    List<OrderDetails> findAllByUserId(String UserId);
 
 }

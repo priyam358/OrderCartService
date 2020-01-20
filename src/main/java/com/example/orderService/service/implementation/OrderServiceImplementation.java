@@ -43,7 +43,7 @@ public class OrderServiceImplementation implements OrderService{
 
     @Override
     public List<OrderDetails> fetchUserDetails(String merchantId, String productId) {
-        return orderRepository.userDetails(merchantId,productId);
+        return orderRepository.findByMerchantIdAndProductId(merchantId,productId);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class OrderServiceImplementation implements OrderService{
             }
         });
         Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("sportycartyteam6@gmail.com","samika98"));
+        msg.setFrom(new InternetAddress("priyam.shah@gmail.com","bbfbxtewqpzxslfe"));
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("samikakashyap@gmail.com"));
         msg.setSubject("SportyCart Order Summary");
@@ -78,6 +78,15 @@ public class OrderServiceImplementation implements OrderService{
         multipart.addBodyPart(attachPart);
         msg.setContent(multipart);
         Transport.send(msg);
+    }
+
+    public List<OrderTable> getOrderLog(){
+        return (List<OrderTable>) orderTableRepository.findAll();
+    }
+
+    public List<OrderDetails> getRecentOrders(String userId){
+        return (List<OrderDetails>) orderRepository.findAllByUserId(userId);
+
     }
 
 

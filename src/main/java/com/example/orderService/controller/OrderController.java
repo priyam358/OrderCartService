@@ -34,7 +34,6 @@ public class OrderController {
 
 
 
-
     // hit from user view
     @PostMapping("/save/{userId}") /// front end will send us userID
     public ResponseEntity<Integer> addOrderDetail(@PathVariable(name="userId") String userId){
@@ -69,12 +68,28 @@ public class OrderController {
     }
     /// on click of checkout in user view
     //// to do in this is send email to the user as well
+    ///empty cart
+    /// to do CHANGE PATH VARIABLE TO REQUEST PARAMS
+    //SHOULD BE A DIFFERENT MICROSERVICE
+    @PostMapping(value="/checkout/{userId}")
+    public String sendEmail(@PathVariable("userId") String userId) throws IOException, MessagingException {
+       // orderService.sendMail();
+        cartService.emptyCart(userId);
 
-    @PostMapping(value="/checkout")
-    public String sendEmail() throws IOException, MessagingException {
-        orderService.sendMail();
         return "Email sent successfully";
     }
+
+    @GetMapping(value ="/orderLog")
+    public List<OrderTable> getOrderLog(){
+       return orderService.getOrderLog();
+    }
+    //User will hit this
+    @GetMapping(value="/getRecentOrders/{userId}")
+    public List<OrderDetails> getRecentOrders(@PathVariable("userId") String userId){
+        return orderService.getRecentOrders(userId);
+    }
+
+
 
 
 

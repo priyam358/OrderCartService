@@ -6,6 +6,7 @@ import com.example.orderService.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class CartServiceImplementation implements CartService {
 
     @Autowired
-    CartRepository cartRepository;
+    private CartRepository cartRepository;
 
     @Override
     public CartDetails save(CartDetails cart) {
@@ -28,6 +29,15 @@ public class CartServiceImplementation implements CartService {
     @Override
     public List<CartDetails> getCartDetails(String userId) {
         return cartRepository.getCartDetails(userId);
+    }
+
+    @Override
+    @Transactional
+    public void emptyCart(String userId){
+        cartRepository.deleteByUserId(userId);
+       // List<CartDetails> cartDetails = cartRepository.removeByUserId("userId");
+
+        //assertEquals("number of fruits are not matching", "2", cartDetails.size());
     }
 
 
