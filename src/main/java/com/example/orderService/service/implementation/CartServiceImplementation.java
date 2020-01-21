@@ -21,10 +21,7 @@ public class CartServiceImplementation implements CartService {
         return cartRepository.save(cart);
     }
 
-    @Override
-    public void updateDetails(int quantity, String userId) {
-        cartRepository.updateQuantity(quantity,userId);
-    }
+
 
     @Override
     public List<CartDetails> getCartDetails(String userId) {
@@ -38,6 +35,14 @@ public class CartServiceImplementation implements CartService {
        // List<CartDetails> cartDetails = cartRepository.removeByUserId("userId");
 
         //assertEquals("number of fruits are not matching", "2", cartDetails.size());
+    }
+
+    @Override
+    @Transactional
+    public void incrementCart(String userId,String productId,Integer quantity){
+
+        cartRepository.incrementCart(userId,productId,quantity);
+
     }
 
 

@@ -9,15 +9,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
 @Repository
 public interface CartRepository extends JpaRepository<CartDetails,String> {
 
-
-    @Query(value = "Update cart_details set quantity =?1 where user_id =?2",nativeQuery=true)
-    void updateQuantity(int quantity, String userId);
+  @Modifying
+    @Query(value = "Update cart_details set quantity =?3 where user_id =?1 and product_id =?2",nativeQuery=true)
+    void incrementCart(String userId,String productId,Integer quantity);
 
 
     @Query(value = "Select * from cart_details where user_id = ?1",nativeQuery = true)

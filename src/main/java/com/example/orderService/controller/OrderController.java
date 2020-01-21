@@ -71,6 +71,7 @@ public class OrderController {
     ///empty cart
     /// to do CHANGE PATH VARIABLE TO REQUEST PARAMS
     //SHOULD BE A DIFFERENT MICROSERVICE
+    //
     @PostMapping(value="/checkout/{userId}")
     public String sendEmail(@PathVariable("userId") String userId) throws IOException, MessagingException {
        // orderService.sendMail();
@@ -88,6 +89,9 @@ public class OrderController {
     public List<OrderDetails> getRecentOrders(@PathVariable("userId") String userId){
         return orderService.getRecentOrders(userId);
     }
+
+
+
 
 
 

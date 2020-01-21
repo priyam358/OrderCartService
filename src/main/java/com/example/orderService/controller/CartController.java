@@ -8,11 +8,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RestController
 @RequestMapping("/cart")
 public class CartController {
@@ -20,7 +20,7 @@ public class CartController {
     @Autowired
     CartService cartService;
 
-    @PostMapping("/saveOrder") //naming convention
+    @PostMapping("/addToCart") //naming convention
     public ResponseEntity<String> addCart(@RequestBody CartDetailsDTO cartDTO){
 
         CartDetails cartDetails  =new CartDetails();
@@ -32,6 +32,20 @@ public class CartController {
 
 
     }
+
+    @GetMapping("/getCart/{userId}")
+    public List<CartDetails> getCart(@PathVariable("userId") String userId){
+       return cartService.getCartDetails(userId);
+    }
+
+    @GetMapping(value ="/cartIncrement/{productId}/{userId}/{quantity}")
+    public void cartIncrement(@PathVariable("productId") String productId,@PathVariable("userId") String userId,@PathVariable("quantity") Integer quantity){
+             cartService.incrementCart(userId,productId,quantity);
+    }
+
+
+
+
 
 
 

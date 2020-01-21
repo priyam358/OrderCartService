@@ -9,9 +9,10 @@ public interface CartService  {
 
     CartDetails save(CartDetails cart);
 
-    void updateDetails(int quantity,String userId);
 
     List<CartDetails> getCartDetails(String userId);
 
     void emptyCart(String userId);
+
+    void incrementCart(String userId,String productId,Integer quantity);
 }
