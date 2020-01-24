@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.Null;
 import java.util.List;
 
 
@@ -21,10 +22,7 @@ public class CartServiceImplementation implements CartService {
         return cartRepository.save(cart);
     }
 
-    @Override
-    public void updateDetails(int quantity, String userId) {
-        cartRepository.updateQuantity(quantity,userId);
-    }
+
 
     @Override
     public List<CartDetails> getCartDetails(String userId) {
@@ -40,5 +38,22 @@ public class CartServiceImplementation implements CartService {
         //assertEquals("number of fruits are not matching", "2", cartDetails.size());
     }
 
+    @Override
+    @Transactional
+    public void incrementCart(String userId,String productId,Integer quantity){
 
+        cartRepository.incrementCart(userId,productId,quantity);
+
+    }
+    /////CHECK ITS WORKINGGGGGG
+    @Override
+    public boolean checkIfProductIsPresent(String productId,String merchantId,String userId){
+        return cartRepository.checkIfProductIsPresent(productId,merchantId,userId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCartRow(String userId, String merchantId, String productId) {
+        cartRepository.deleteCartRow(userId,merchantId,productId);
+    }
 }

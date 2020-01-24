@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class CartDetailsDTO {
 
-    private int keyId;
+
     private String userId;
     private String merchantId;
     private String productId;
@@ -18,3 +18,4 @@ public class CartDetailsDTO {
 
 
 }
+
