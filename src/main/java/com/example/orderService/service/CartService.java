@@ -15,4 +15,8 @@ public interface CartService  {
     void emptyCart(String userId);
 
     void incrementCart(String userId,String productId,Integer quantity);
+
+    boolean checkIfProductIsPresent(String productId,String merchantId,String userId);
+
+    void deleteCartRow(String userId,String merchantId,String productId);
 }

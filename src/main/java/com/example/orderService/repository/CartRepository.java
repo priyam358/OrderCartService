@@ -34,6 +34,14 @@ public interface CartRepository extends JpaRepository<CartDetails,String> {
     //@Query(value = "Select * from order_table where user_id = ?1",nativeQuery = true)
     //public List<CartDetails> getCartDetails(String userId);
 
+    @Query(value = "Select (case when count(quantity)>0 then true else false end) from Cart_Details where product_id=?1 and merchant_id=?2 and user_id=?3",nativeQuery = true)
+      boolean checkIfProductIsPresent(String productId,String merchantId,String userId);
+
+    @Modifying
+    @Query(value = "Delete from cart_details where product_id=?3 and merchant_id=?2 and user_id=?1",nativeQuery = true)
+    void
+
+    deleteCartRow(String userId,String merchantId,String productId);
 
 
     }
