@@ -12,6 +12,7 @@ import com.example.orderService.service.CartService;
 import com.example.orderService.service.OrderService;
 import com.example.orderService.service.implementation.CartServiceImplementation;
 import com.example.orderService.service.implementation.OrderServiceImplementation;
+import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class OrderController {
     //SHOULD BE A DIFFERENT MICROSERVICE
     //
     @PostMapping(value="/checkout/{userId}")
-    public List<StockCheckDTO> sendEmail(@RequestBody List<CartDetailsDTO> orderDetailsDTOList, @PathVariable("userId") String userId) throws IOException, MessagingException {
+    public List<StockCheckDTO> sendEmail(@RequestBody List<CartDetailsDTO> orderDetailsDTOList, @PathVariable("userId") String userId) throws IOException, MessagingException ,TemplateException {
         log.info("userID : {}, dto :{}",userId, orderDetailsDTOList);
         List<StockCheckDTO> stockCheckDTOList = orderService.checkStockAvailability(orderDetailsDTOList,userId);
 
@@ -90,15 +91,23 @@ public class OrderController {
 
 
     @PostMapping(value = "/setProductRating/{orderId}/{productId}/{merchantId}/{userId}/{rating}")
-    public void setOrderRating(@PathVariable("orderId") int orderId,@PathVariable("productId") String productId,@PathVariable("merchantId") String merchantId,@PathVariable("userId") String userId,@PathVariable("rating") Double rating){
+    public boolean setOrderRating(@PathVariable("orderId") int orderId,@PathVariable("productId") String productId,@PathVariable("merchantId") String merchantId,@PathVariable("userId") String userId,@PathVariable("rating") Double rating){
+
         orderService.setOrderRating(orderId,productId,merchantId,userId,rating);
+
         double productRating=orderService.productRating(productId);
-        System.out.println(productRating);
+
+       // System.out.println(productRating);
+
         double merchantRating = orderService.merchantRating(merchantId);
-        System.out.println(merchantRating);
+       // System.out.println(merchantRating);
         int countOfProduct = orderService.noOfProductsSold(productId);
-        System.out.println(countOfProduct);
+
+       // System.out.println(countOfProduct);
+        return true;
     }
+
+
 
 
 

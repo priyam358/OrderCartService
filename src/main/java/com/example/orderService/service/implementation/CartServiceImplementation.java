@@ -40,9 +40,9 @@ public class CartServiceImplementation implements CartService {
 
     @Override
     @Transactional
-    public void incrementCart(String userId,String productId,Integer quantity){
+    public void incrementCart(String userId,String productId,Integer quantity,String merchantId){
 
-        cartRepository.incrementCart(userId,productId,quantity);
+        cartRepository.incrementCart(userId,productId,quantity,merchantId);
 
     }
     /////CHECK ITS WORKINGGGGGG

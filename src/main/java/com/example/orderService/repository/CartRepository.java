@@ -17,8 +17,8 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<CartDetails,String> {
 
   @Modifying
-    @Query(value = "Update cart_details set quantity =?3 where user_id =?1 and product_id =?2",nativeQuery=true)
-    void incrementCart(String userId,String productId,Integer quantity);
+    @Query(value = "Update cart_details set quantity =?3 where user_id =?1 and product_id =?2 and merchant_id =?4",nativeQuery=true)
+    void incrementCart(String userId,String productId,Integer quantity,String merchantId);
 
 
     @Query(value = "Select * from cart_details where user_id = ?1",nativeQuery = true)

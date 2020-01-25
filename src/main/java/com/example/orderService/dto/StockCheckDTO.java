@@ -11,4 +11,5 @@ public class StockCheckDTO {
     String merchantId;
     int quantity;
     boolean status;
+
 }

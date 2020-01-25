@@ -7,17 +7,23 @@ import com.example.orderService.dto.StockCheckDTO;
 import com.example.orderService.entity.CartDetails;
 import com.example.orderService.entity.OrderDetails;
 import com.example.orderService.entity.OrderTable;
+import com.example.orderService.model.MailModel;
 import com.example.orderService.repository.OrderRepository;
 import com.example.orderService.repository.OrderTableRepository;
 import com.example.orderService.service.CartService;
 import com.example.orderService.service.MerchantFeign;
 import com.example.orderService.service.OrderService;
 import com.example.orderService.service.ProductFeign;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import sun.jvm.hotspot.debugger.AddressException;
 
 import javax.mail.*;
@@ -27,10 +33,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +54,10 @@ public class OrderServiceImplementation implements OrderService{
     @Autowired
     ProductFeign productFeign;
 
+    @Autowired
+    @Qualifier("emailConfigBean")
+    private Configuration emailConfig;
+
     @Override
     public OrderDetails saveDetail(OrderDetails orderDetails) {
         return orderRepository.save(orderDetails);
@@ -69,7 +76,7 @@ public class OrderServiceImplementation implements OrderService{
 
     @Override
     @Async
-    public void sendMail(String userId) throws AddressException, MessagingException, IOException {
+    public void sendMail(String userId) throws AddressException, MessagingException, IOException, TemplateException {
         List<OrderDetails> orderId=orderRepository.findAllByUserId(userId);
         int recentOrderId=orderId.get(orderId.size()-1).getOrderId();
         List<OrderDetails> orders=orderRepository.findAllByOrderId(recentOrderId);
@@ -81,30 +88,59 @@ public class OrderServiceImplementation implements OrderService{
         props.put("mail.smtp.port", "587");
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("priyam.shah@coviam.com", "indxmatyliovrupr");
+                return new PasswordAuthentication("sportycartteam6@gmail.com", "mowuhkbogumbgfuu");
             }
         });
+        String newLine = "<br>";
+        String content="Following is your order summary for order_Id : "+orders.get(0).getOrderId();
+        content+=newLine;
+        Double total=0.0;
+        content+="<table border='2px'><tr><th border='2px'>ProductId</th><th>MerchantId</th><th>Quantity</th><th>Price</th></tr>";
         for (OrderDetails orderDetails: orders
                 ) {
-            Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("priyam.shah@coviam.com", false));
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("priyamshah358@gmail.com"));
-            msg.setSubject("Your Order Summary :");
-            msg.setContent("Your Order Summary :", "text/html");
-            msg.setSentDate(new Date());
-            MimeBodyPart messageBodyPart = new MimeBodyPart();
-            String emailMessage;
-            emailMessage=orderDetails.getUserId()+"\n"+orderDetails.getOrderId()+"\n"+orderDetails.getProductId()+"\n"+orderDetails.getMerchantId();
-            messageBodyPart.setContent(emailMessage, "text/html");
-            Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(messageBodyPart);
-            //MimeBodyPart attachPart = new MimeBodyPart();
-            //attachPart.attachFile("/var/tmp/image19.png");
-            //multipart.addBodyPart(attachPart);
-            msg.setContent(multipart);
-            Transport.send(msg);
-            System.out.println(" email sent successfully using email template!");}
+            content+="<tr border='2px'>";
+            //content+=newLine;
+            content+="<td style='text-align:center'>"+orderDetails.getProductId()+"</td>";
+            //content+="</tr><tr>";
+            content+="<td text-align'center'>"+orderDetails.getMerchantId()+"</td>";
+            // content+=newLine;
+            content+="<td text-align'center'>"+orderDetails.getQuantity()+"</td>";
+            //content+=newLine;
+            content+="<td text-align='center'>"+orderDetails.getPrice()+"</td>";
+            //content+=newLine;
+            content+="</tr>";
+            total =total+orderDetails.getQuantity()*orderDetails.getPrice();
+        }
+        content+="</table>";
+        content+="<br>";
+        content+=" <b> The Total Amount is : " +total+"</b>";
+        Map model = new HashMap();
+        model.put("name", orders.get(0).getUserId());
+        model.put("location", "HSR Layout , Banglore");
+        model.put("signature", "https://sportykart.com");
+        model.put("content", content);
+        MailModel mailModel=new MailModel("Priyam","this is sublect","This is content",model);
+        Template template = emailConfig.getTemplate("email.ftl");
+        String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, mailModel.getModel());
+        Message msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress("priyam.shah@coviam.com", false));
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("priyamshah649@gmail.com"));
+        msg.setSubject("Your Order Summary :");
+        msg.setContent("Your Order Summary :", "text/html");
+        msg.setSentDate(new Date());
+        MimeBodyPart messageBodyPart = new MimeBodyPart();
+        String emailMessage;
+        //String qw=mailContentBuilder.build(emailMessage);
+        messageBodyPart.setContent(html, "text/html");
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+        //MimeBodyPart attachPart = new MimeBodyPart();
+        //attachPart.attachFile("/var/tmp/image19.png");
+        //multipart.addBodyPart(attachPart);
+        msg.setContent(multipart);
+        Transport.send(msg);
     }
+
 
     public List<OrderTable> getOrderLog(){
         return (List<OrderTable>) orderTableRepository.findAll();

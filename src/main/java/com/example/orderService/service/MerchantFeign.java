@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(value = "MerchantFeign" , url = "http://localhost:8085")
+@FeignClient(value = "MerchantFeign" , url = "http://localhost:8090")
 public interface MerchantFeign {
     @RequestMapping(method = RequestMethod.GET , value = "/productList/checkStock/{productId}/{merchantId}/{quantity}")
     boolean checkStockFeign(@PathVariable("productId") String productId,@PathVariable("merchantId") Integer merchantId,@PathVariable("quantity") Integer quantity );
