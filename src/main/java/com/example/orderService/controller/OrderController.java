@@ -49,9 +49,9 @@ public class OrderController {
 
     }*/
      /// hit from merchant view
-    @GetMapping(value="/customerDetails/{merchantId}/{productId}")
-    public List<OrderDetails> fetchCustomerDetails(@PathVariable("merchantId") String merchantId,@PathVariable("productId") String productId){
-        return orderService.fetchUserDetails(merchantId,productId);
+    @GetMapping(value="/customerDetails/{merchantId}")
+    public List<OrderDetails> fetchCustomerDetails(@PathVariable("merchantId") String merchantId){
+        return orderService.fetchUserDetails(merchantId);
 
     }
     /// on click of checkout in user view

@@ -17,6 +17,10 @@ public interface MerchantFeign {
     @RequestMapping(method = RequestMethod.POST , value = "/merchant/setMerchantRating/{id}/{rating}")
     boolean setMerchantRating(@PathVariable("id") Integer id,@PathVariable("rating") double rating);
 
+    @RequestMapping(method = RequestMethod.POST , value ="/productList/setProductRating/{productId}/{rating}")
+    boolean setProductRating(@PathVariable("productId") String productId, @PathVariable("rating") double rating);
+
+
 
 
 }

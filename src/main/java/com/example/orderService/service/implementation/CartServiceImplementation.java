@@ -23,6 +23,13 @@ public class CartServiceImplementation implements CartService {
     }
 
 
+    @Override
+    @Transactional
+    public void updateUserOnLogin(String guestUserId, String userId) {
+        if(guestUserId.isEmpty() || userId.isEmpty()) return;
+
+        cartRepository.updateUserOnLogin(guestUserId,userId);
+    }
 
     @Override
     public List<CartDetails> getCartDetails(String userId) {

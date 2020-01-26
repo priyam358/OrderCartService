@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface OrderRepository extends CrudRepository<OrderDetails,String> {
 
 
-    List<OrderDetails> findByMerchantIdAndProductId(String merchantId,String productId);
+    List<OrderDetails> findByMerchantId(String merchantId);
 
     List<OrderDetails> findAllByUserId(String UserId);
 

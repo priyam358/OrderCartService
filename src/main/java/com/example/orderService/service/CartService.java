@@ -19,4 +19,6 @@ public interface CartService  {
     boolean checkIfProductIsPresent(String productId,String merchantId,String userId);
 
     void deleteCartRow(String userId,String merchantId,String productId);
+
+    void updateUserOnLogin(String guestUserId, String userId);
 }

@@ -22,7 +22,7 @@ public interface OrderService {
 
     OrderTable saveOrder(OrderTable orderTable);
 
-    List<OrderDetails>  fetchUserDetails(String merchantId,String productId);
+    List<OrderDetails>  fetchUserDetails(String merchantId);
 
     void sendMail(String userId) throws MessagingException, IOException, TemplateException;
 

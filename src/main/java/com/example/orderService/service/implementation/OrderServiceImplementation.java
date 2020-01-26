@@ -70,8 +70,8 @@ public class OrderServiceImplementation implements OrderService{
     }
 
     @Override
-    public List<OrderDetails> fetchUserDetails(String merchantId, String productId) {
-        return orderRepository.findByMerchantIdAndProductId(merchantId,productId);
+    public List<OrderDetails> fetchUserDetails(String merchantId) {
+        return orderRepository.findByMerchantId(merchantId);
     }
 
     @Override
@@ -242,7 +242,7 @@ public class OrderServiceImplementation implements OrderService{
     public double productRating(String productId){
         List<OrderDetails> listOfOrders=orderRepository.findAllByProductId(productId);
         double averageRating=listOfOrders.stream().mapToDouble(OrderDetails::getRating).average().getAsDouble();
-        productFeign.setProductRating(productId,averageRating);
+        merchantFeign.setProductRating(productId,averageRating);
         return averageRating;
     }
 
@@ -259,6 +259,7 @@ public class OrderServiceImplementation implements OrderService{
         List<OrderDetails> listOfOrders=orderRepository.findAllByProductId(productId);
         return listOfOrders.size();
     }
+
 
 
 
