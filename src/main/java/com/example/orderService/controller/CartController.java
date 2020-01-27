@@ -54,7 +54,7 @@ public class CartController {
         return true;
     }
 
-    @PostMapping("updateUserOnLogin/{guestUserId}/{userId}")
+    @PostMapping("/updateUserOnLogin/{guestUserId}/{userId}")
     public boolean updateUserOnLogin(@PathVariable("guestUserId") String guestUserId,@PathVariable("userId") String userId){
         cartService.updateUserOnLogin(guestUserId,userId);
         return true;

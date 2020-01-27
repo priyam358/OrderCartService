@@ -124,7 +124,7 @@ public class OrderServiceImplementation implements OrderService{
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, mailModel.getModel());
         Message msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress("priyam.shah@coviam.com", false));
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("priyamshah649@gmail.com"));
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("priyam.shah@coviam.com"));
         msg.setSubject("Your Order Summary :");
         msg.setContent("Your Order Summary :", "text/html");
         msg.setSentDate(new Date());

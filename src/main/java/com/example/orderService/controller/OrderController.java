@@ -61,12 +61,11 @@ public class OrderController {
     //SHOULD BE A DIFFERENT MICROSERVICE
     //
     @PostMapping(value="/checkout/{userId}")
-    public List<StockCheckDTO> sendEmail(@RequestBody List<CartDetailsDTO> orderDetailsDTOList, @PathVariable("userId") String userId) throws IOException, MessagingException ,TemplateException {
+    public List<StockCheckDTO> sendEmail(@RequestBody List<CartDetailsDTO> orderDetailsDTOList, @PathVariable("userId") String userId)  throws IOException, MessagingException ,TemplateException {
         log.info("userID : {}, dto :{}",userId, orderDetailsDTOList);
         List<StockCheckDTO> stockCheckDTOList = orderService.checkStockAvailability(orderDetailsDTOList,userId);
-
-        orderService.sendMail(userId);
         cartService.emptyCart(userId);
+        orderService.sendMail(userId);
         return stockCheckDTOList;
     }
 
@@ -106,6 +105,7 @@ public class OrderController {
        // System.out.println(countOfProduct);
         return true;
     }
+
 
 
 
