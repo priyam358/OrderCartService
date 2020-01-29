@@ -16,9 +16,9 @@ import java.util.List;
 @Repository
 public interface CartRepository extends JpaRepository<CartDetails,String> {
 
-  @Modifying
-    @Query(value = "Update cart_details set quantity =?3 where user_id =?1 and product_id =?2",nativeQuery=true)
-    void incrementCart(String userId,String productId,Integer quantity);
+    @Modifying
+    @Query(value = "Update cart_details set quantity =?3 where user_id =?1 and product_id =?2 and merchant_id =?4",nativeQuery=true)
+    void incrementCart(String userId,String productId,Integer quantity,String merchantId);
 
 
     @Query(value = "Select * from cart_details where user_id = ?1",nativeQuery = true)
@@ -35,15 +35,15 @@ public interface CartRepository extends JpaRepository<CartDetails,String> {
     //public List<CartDetails> getCartDetails(String userId);
 
     @Query(value = "Select (case when count(quantity)>0 then true else false end) from Cart_Details where product_id=?1 and merchant_id=?2 and user_id=?3",nativeQuery = true)
-      boolean checkIfProductIsPresent(String productId,String merchantId,String userId);
+    boolean checkIfProductIsPresent(String productId,String merchantId,String userId);
 
     @Modifying
     @Query(value = "Delete from cart_details where product_id=?3 and merchant_id=?2 and user_id=?1",nativeQuery = true)
-    void
+    void deleteCartRow(String userId,String merchantId,String productId);
 
-    deleteCartRow(String userId,String merchantId,String productId);
-
-
-    }
+    @Modifying
+    @Query(value = "Update cart_details set user_id=?2 where user_id=?1",nativeQuery = true)
+    void updateUserOnLogin(String guestUserId, String userId);
+}
 
 

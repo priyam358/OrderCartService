@@ -42,15 +42,21 @@ public class CartController {
        return cartService.getCartDetails(userId);
     }
 
-    @GetMapping(value ="/cartIncrement/{productId}/{userId}/{quantity}")
-    public boolean cartIncrement(@PathVariable("productId") String productId,@PathVariable("userId") String userId,@PathVariable("quantity") Integer quantity){
-             cartService.incrementCart(userId,productId,quantity);
+    @GetMapping(value ="/cartIncrement/{productId}/{userId}/{quantity}/{merchantId}")
+    public boolean cartIncrement(@PathVariable("productId") String productId,@PathVariable("userId") String userId,@PathVariable("quantity") Integer quantity,@PathVariable("merchantId") String merchantId){
+             cartService.incrementCart(userId,productId,quantity,merchantId);
              return true;
     }
 
     @GetMapping("/deleteCartRow/{userId}/{merchantId}/{productId}")
     public boolean deleteCartRow(@PathVariable("userId") String userId,@PathVariable("merchantId") String merchantId,@PathVariable("productId") String productId){
         cartService.deleteCartRow(userId,merchantId,productId);
+        return true;
+    }
+
+    @PostMapping("/updateUserOnLogin/{guestUserId}/{userId}")
+    public boolean updateUserOnLogin(@PathVariable("guestUserId") String guestUserId,@PathVariable("userId") String userId){
+        cartService.updateUserOnLogin(guestUserId,userId);
         return true;
     }
 

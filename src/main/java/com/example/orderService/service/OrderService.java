@@ -5,6 +5,7 @@ import com.example.orderService.dto.OrderDetailsDTO;
 import com.example.orderService.dto.StockCheckDTO;
 import com.example.orderService.entity.OrderDetails;
 import com.example.orderService.entity.OrderTable;
+import freemarker.template.TemplateException;
 import org.hibernate.criterion.Order;
 
 import javax.mail.MessagingException;
@@ -21,9 +22,9 @@ public interface OrderService {
 
     OrderTable saveOrder(OrderTable orderTable);
 
-    List<OrderDetails>  fetchUserDetails(String merchantId,String productId);
+    List<OrderDetails>  fetchUserDetails(String merchantId);
 
-    void sendMail(String userId) throws MessagingException, IOException;
+    void sendMail(String userId) throws MessagingException, IOException, TemplateException;
 
     List<OrderTable> getOrderLog();
 
@@ -36,8 +37,11 @@ public interface OrderService {
     OrderDetails transferFromCart(String userId);
 
     double merchantRating(String merchantId);
+
     double productRating(String productId);
+
     void setOrderRating(int orderId,String productId,String merchantId,String userId,Double rating);
+
     int noOfProductsSold(String productId);
 
 
